@@ -2,10 +2,12 @@
 import Link from "next/link";
 import Image from "next/image";
 import React, { useState } from "react";
+import { Shield } from "lucide-react";
+import AdminLoginModal from "./components/modal";
 
 const ShoppingLandingPage = () => {
   const [menuActive, setMenuActive] = useState(false);
-
+  const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
   const toggleMenu = () => {
     setMenuActive(!menuActive);
   };
@@ -15,51 +17,46 @@ const ShoppingLandingPage = () => {
     {
       id: 1,
       image: "/num b.jpg",
-      category: "Women",
-      title: "Ladies Dress",
+      title: "Heel",
       price: 250,
     },
     {
       id: 2,
       image: "/num c.jpg",
-      category: "Women",
-      title: "Two Piece Set",
+      title: "Black Anklet Heel",
       price: 180,
     },
     {
       id: 3,
       image: "/num 8.jpg",
-      category: "Men",
-      title: "Summer Shirt",
+      title: "Watch",
       price: 70,
     },
     {
       id: 4,
       image: "/num e.jpg",
-      category: "Men",
-      title: "Men Official Suit",
+      title: "Sneakers",
       price: 250,
     },
     {
       id: 5,
       image: "/num h.jpg",
-      category: "Women",
-      title: "Charm Bracelet",
+
+      title: "Long Sleeves",
       price: 50,
     },
     { id: 6, image: "/pic 11.jpg", category: "Men", title: "Watch", price: 80 },
     {
       id: 7,
       image: "/pic 8.jpg",
-      category: "Women",
-      title: "Heels",
+      title: "Classy Blouse",
       price: 100,
     },
     {
       id: 8,
       image: "/pic 9.jpg",
-      category: "Men",
-      title: "Sneakers",
+
+      title: "Vavaluxe Corset Dress",
       price: 150,
     },
   ];
@@ -82,9 +79,13 @@ const ShoppingLandingPage = () => {
           <Link href="/shop" className="text-gray-700 hover:text-red-500">
             Shop
           </Link>
-          <Link href="/admin" className="text-gray-700 hover:text-red-500">
-            Admin
-          </Link>
+          <button
+            className="hover:text-red-500 flex cursor-pointer items-center"
+            onClick={() => setIsAdminModalOpen(true)}
+          >
+            <Shield size={24} />
+            <span className="ml-1 hidden md:inline">Admin</span>
+          </button>
         </div>
 
         {/* Mobile Menu Button */}
@@ -161,6 +162,11 @@ const ShoppingLandingPage = () => {
         </div>
       </section>
 
+      {/* Admin Login Modal */}
+      <AdminLoginModal
+        isOpen={isAdminModalOpen}
+        onClose={() => setIsAdminModalOpen(false)}
+      />
       {/* Footer */}
       <footer className="py-6 bg-gray-800 text-center text-white">
         <p>
