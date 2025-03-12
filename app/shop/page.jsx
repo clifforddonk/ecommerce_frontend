@@ -107,6 +107,37 @@ const ProductListingPage = () => {
     }));
   };
 
+  const handleAdminLogin = async (e) => {
+    e.preventDefault();
+    setAuthError("");
+
+    try {
+      // Validate admin credentials against environment variables
+      const response = await axios.post("/api/admin/verify", adminCredentials);
+
+      if (response.data.success) {
+        // Reset form and close modal
+        setAdminCredentials({ username: "", password: "" });
+        setIsAdminModalOpen(false);
+
+        // Navigate to admin page
+        router.push("/admin");
+      } else {
+        setAuthError("Invalid credentials. Please try again.");
+      }
+    } catch (error) {
+      console.log(error);
+      setAuthError("Authentication failed. Please try again.");
+    }
+  };
+
+  const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
+  const [adminCredentials, setAdminCredentials] = useState({
+    username: "",
+    password: "",
+  });
+
+  const [authError, setAuthError] = useState("");
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -201,11 +232,18 @@ const ProductListingPage = () => {
     <div className="bg-gray-50 min-h-screen">
       <header className="bg-white shadow-sm sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <Link href="/">
-            <h1 className="text-2xl font-bold text-gray-800 flex items-center hover:scale-105 cursor-pointer  transition-all">
-              Luxloom Couture
-            </h1>
-          </Link>
+          <div className="flex gap-2">
+            <Link href="/">
+              <h1 className="text-2xl font-bold text-gray-800 flex items-center hover:scale-105 cursor-pointer  transition-all">
+                Luxloom Couture
+              </h1>
+            </Link>
+            {/* <Link href="/">
+              <h1 className="text-sm font-bold text-gray-800 flex items-center  cursor-pointer  transition-all">
+                Back to Homepage
+              </h1>
+            </Link> */}
+          </div>
           <div className="relative w-full max-w-md mx-4">
             <input
               type="text"
@@ -292,23 +330,18 @@ const ProductListingPage = () => {
             {filteredProducts.map((product) => (
               <div
                 key={product.id}
-                className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
+                className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition duration-300"
               >
-                <div className="relative aspect-square bg-gray-100 overflow-hidden">
+                <div className="h-64 overflow-hidden">
                   {product.imageUrl ? (
                     <img
                       src={getCloudinaryUrl(product.imageUrl)}
                       alt={product.name}
-                      className="h-full  w-full object-cover transition-transform duration-300 hover:scale-105"
+                      className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center bg-gray-200">
                       <Package size={64} className="text-gray-400" />
-                    </div>
-                  )}
-                  {product.discount && (
-                    <div className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
-                      {product.discount}% OFF
                     </div>
                   )}
                 </div>
@@ -498,6 +531,72 @@ const ProductListingPage = () => {
         </div>
       )}
 
+      {/* Admin Login Modal */}
+      {isAdminModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
+            <div className="flex justify-between items-center p-5 border-b">
+              <h2 className="text-xl font-bold text-gray-800">Admin Login</h2>
+              <button
+                onClick={() => {
+                  setIsAdminModalOpen(false);
+                  setAdminCredentials({ username: "", password: "" });
+                  setAuthError("");
+                }}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <X size={24} />
+              </button>
+            </div>
+            <div className="p-5">
+              <form onSubmit={handleAdminLogin} className="space-y-4">
+                {authError && (
+                  <div
+                    className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+                    role="alert"
+                  >
+                    <span className="block sm:inline">{authError}</span>
+                  </div>
+                )}
+                <div>
+                  <label className="block text-gray-700 text-sm font-medium mb-1">
+                    <User size={16} className="inline mr-1" /> Username
+                  </label>
+                  <input
+                    name="username"
+                    type="text"
+                    value={adminCredentials.username}
+                    onChange={handleAdminInputChange}
+                    required
+                    className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Enter admin username"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-700 text-sm font-medium mb-1">
+                    Password
+                  </label>
+                  <input
+                    name="password"
+                    type="password"
+                    value={adminCredentials.password}
+                    onChange={handleAdminInputChange}
+                    required
+                    className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Enter admin password"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="w-full bg-gray-800 hover:bg-gray-600 text-white font-medium py-3 px-4 rounded-md transition-colors mt-4"
+                >
+                  Login
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
       <footer className="bg-gray-800 text-white border-t mt-12 py-8">
         <div className="container mx-auto px-4">
           <div className="text-center text-sm">
