@@ -8,8 +8,8 @@ const nunito = Nunito({
 });
 
 export const metadata = {
-  title: "My Online Quiz Platform",
-  description: "Test your knowledge with interactive quizzes",
+  title: "Online Shopping System",
+  description: "All Kinds Of Clothing Available",
 };
 
 export default function RootLayout({ children }) {
