@@ -15,6 +15,7 @@ import {
   Home,
 } from "lucide-react";
 import Link from "next/link";
+import { TiArrowBack } from "react-icons/ti";
 
 const ProductListingPage = () => {
   const [products, setProducts] = useState([]);
@@ -234,7 +235,10 @@ const ProductListingPage = () => {
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex gap-2">
             <Link href="/">
-              <h1 className="text-2xl font-bold text-gray-800 flex items-center hover:scale-105 cursor-pointer  transition-all">
+              <h1 className="text-2xl font-bold text-gray-800 flex items-center cursor-pointer  transition-all">
+                <span>
+                  <TiArrowBack className="text-3xl" />
+                </span>
                 Luxloom Couture
               </h1>
             </Link>
@@ -506,7 +510,7 @@ const ProductListingPage = () => {
                   </div>
                   <div className="flex justify-between mb-2">
                     <span className="text-gray-600">Delivery Fee:</span>
-                    <span className="font-medium">${(5.0).toFixed(2)}</span>
+                    <span className="font-medium">${(10.0).toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between font-bold text-lg">
                     <span>Total:</span>
@@ -514,7 +518,7 @@ const ProductListingPage = () => {
                       $
                       {(
                         selectedProduct.price * formData.quantity +
-                        5.0
+                        10.0
                       ).toFixed(2)}
                     </span>
                   </div>
